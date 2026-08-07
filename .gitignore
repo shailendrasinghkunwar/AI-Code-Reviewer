@@ -1,0 +1,63 @@
+# Dependencies and package-manager caches
+node_modules/
+.pnp/
+.pnp.js
+.npm/
+.yarn/
+.pnpm-store/
+
+# Environment variables, secrets, and local credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+service-account*.json
+
+# Build output, source maps, and tool caches
+client/dist/
+server/dist/
+coverage/
+.vite/
+.cache/
+.eslintcache
+*.tsbuildinfo
+*.map
+
+# Logs, diagnostics, and runtime files
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+logs/
+*.pid
+*.pid.lock
+*.seed
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# Test and quality reports
+.nyc_output/
+test-results/
+playwright-report/
+blob-report/
+
+# Local uploads and temporary files
+uploads/
+tmp/
+temp/
+
+# Editor and operating-system files
+.vscode/
+.idea/
+*.swp
+*.swo
+*.swn
+.history/
+.DS_Store
+Thumbs.db
+Desktop.ini

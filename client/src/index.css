@@ -1,0 +1,121 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    background: #f8fafc;
+  }
+
+  body {
+    min-height: 100vh;
+    overflow-x: hidden;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: rgba(99, 102, 241, 0.22);
+    color: inherit;
+  }
+
+  input, select, button, textarea {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+.app-background {
+  background-color: #f8fafc;
+  background-image:
+    radial-gradient(circle at 12% -8%, rgba(99, 102, 241, 0.14), transparent 28rem),
+    radial-gradient(circle at 92% 8%, rgba(14, 165, 233, 0.12), transparent 24rem);
+}
+
+.dark .app-background {
+  background-color: #020617;
+  background-image:
+    radial-gradient(circle at 12% -8%, rgba(79, 70, 229, 0.19), transparent 30rem),
+    radial-gradient(circle at 92% 8%, rgba(2, 132, 199, 0.14), transparent 25rem);
+}
+
+.surface-card {
+  box-shadow: 0 18px 45px -28px rgba(15, 23, 42, 0.4);
+}
+
+.dark .surface-card {
+  box-shadow: 0 20px 48px -28px rgba(0, 0, 0, 0.75);
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-7px); }
+}
+
+.animate-float {
+  animation: float 5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Custom scrollbars for clean code look */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.5);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(51, 65, 85, 0.5);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(71, 85, 105, 0.8);
+}
+
+/* Glassmorphism utility */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.dark .glass-panel {
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(51, 65, 85, 0.6);
+}
+
+/* Subtle glow animation for AI score badge */
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(59, 130, 246, 0.6);
+  }
+}
+
+.animate-glow {
+  animation: pulseGlow 3s infinite ease-in-out;
+}
