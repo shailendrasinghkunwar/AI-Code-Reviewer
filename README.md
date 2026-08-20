@@ -144,3 +144,21 @@ This will launch **both** services simultaneously:
 1. **Database**: Use a MongoDB Atlas cluster and set `MONGODB_URI` in production environment variables.
 2. **Backend**: Deploy the Express `server` to platforms like Render, Railway, AWS ECS, or DigitalOcean App Platform. Ensure `GEMINI_API_KEY`, `JWT_SECRET`, and `NODE_ENV=production` are set.
 3. **Frontend**: Build production assets (`npm run build` in `client`) and deploy the static build to Vercel, Netlify, or Cloudflare Pages.
+
+### Current Render + Vercel setup
+
+The client already defaults to the Render API in production. You can override
+that URL in the Vercel project settings by adding this environment variable for
+**Production** (and Preview if desired), then redeploy:
+
+```env
+VITE_API_URL=https://ai-code-reviewer-2-mjno.onrender.com/api
+```
+
+The backend allows `https://ai-code-reviewer-six-kappa.vercel.app` by default.
+For additional frontend domains, set the Render environment variable below to
+a comma-separated list and redeploy the backend:
+
+```env
+CLIENT_URL=https://ai-code-reviewer-six-kappa.vercel.app
+```
