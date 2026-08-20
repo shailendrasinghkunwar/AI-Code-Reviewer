@@ -1,13 +1,14 @@
-const { GoogleGenerativeAI } = require('@google/generative-ai');
+const { GoogleGenAI } = require('@google/genai');
 
-const getGeminiModel = () => {
-  const apiKey = process.env.GEMINI_API_KEY;
+const getGeminiClient = () => {
+  const apiKey = process.env.GEMINI_API_KEY?.trim();
   if (!apiKey) {
-    console.warn('[Gemini Warning] GEMINI_API_KEY is not configured in environment variables.');
+    const error = new Error('GEMINI_API_KEY is not configured. Add it to server/.env and restart the server.');
+    error.statusCode = 503;
+    throw error;
   }
-  const genAI = new GoogleGenerativeAI(apiKey || 'DUMMY_KEY');
-  // Use gemini-1.5-flash for fast and accurate code reviews
-  return genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+
+  return new GoogleGenAI({ apiKey });
 };
 
-module.exports = getGeminiModel;
+module.exports = getGeminiClient;

@@ -31,7 +31,7 @@ A production-ready, full-stack web application that performs automated AI-driven
 - **Frontend**: React.js (Vite), `@monaco-editor/react`, React Router v6, Tailwind CSS, Axios, Lucide React.
 - **Backend**: Node.js, Express.js (MVC Architecture).
 - **Database**: MongoDB with Mongoose ORM.
-- **AI Integration**: Google Gemini API (`@google/generative-ai` SDK with `gemini-1.5-flash` model).
+- **AI Integration**: Google Gemini API (`@google/genai` SDK with the configurable `gemini-3.6-flash` model).
 - **Security**: JWT (JSON Web Tokens), `bcryptjs` hashing, CORS protection, custom auth middleware.
 
 ---
@@ -99,6 +99,8 @@ NODE_ENV=development
 MONGODB_URI=mongodb://127.0.0.1:27017/ai-code-reviewer
 JWT_SECRET=your_jwt_secret_key_123!
 GEMINI_API_KEY=YOUR_ACTUAL_GEMINI_API_KEY_HERE
+# Optional: defaults to gemini-3.6-flash
+GEMINI_MODEL=gemini-3.6-flash
 ```
 
 ---

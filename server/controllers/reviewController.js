@@ -1,5 +1,5 @@
 const Review = require('../models/Review');
-const getGeminiModel = require('../config/gemini');
+const getGeminiClient = require('../config/gemini');
 const { buildReviewPrompt, parseGeminiResponse } = require('../utils/geminiPrompt');
 
 // @desc    Analyze code using Gemini API & save review
@@ -17,50 +17,36 @@ const analyzeCode = async (req, res, next) => {
       return res.status(400).json({ success: false, message: 'Programming language is required' });
     }
 
-    const geminiModel = getGeminiModel();
     const prompt = buildReviewPrompt(code, language);
 
     console.log(`[Gemini Request] Analyzing ${language} code for user ${req.user._id}...`);
 
     let analysisResult;
     try {
-      const result = await geminiModel.generateContent(prompt);
-      const responseText = result.response.text();
+      const geminiClient = getGeminiClient();
+      const result = await geminiClient.models.generateContent({
+        // Gemini 1.5 Flash was retired. Keep the model configurable so it can be
+        // changed without editing source code when Google updates model lifecycles.
+        model: process.env.GEMINI_MODEL || 'gemini-3.6-flash',
+        contents: prompt,
+        config: {
+          responseMimeType: 'application/json',
+          temperature: 0.2,
+        },
+      });
+      const responseText = result.text;
+      if (!responseText) {
+        throw new Error('Gemini returned an empty response.');
+      }
       analysisResult = parseGeminiResponse(responseText);
     } catch (aiError) {
       console.error('[Gemini API Error]', aiError.message);
-      // Mock/Fallback evaluation if Gemini API key is missing or quota exceeded
-      analysisResult = {
-        score: 7.5,
-        summary: `Analysis performed (Fallback Mode - ${aiError.message.slice(0, 100)}). Code structure verified for ${language}.`,
-        timeComplexity: 'O(N)',
-        spaceComplexity: 'O(1)',
-        bugs: [
-          {
-            line: 1,
-            description: 'Ensure inputs are sanitized before processing.',
-            severity: 'Medium',
-            fix: 'Add input validation guards.',
-          },
-        ],
-        codeQuality: [
-          'Maintain consistent indentation and variable naming conventions.',
-          'Consider breaking complex expressions into smaller helper variables.',
-        ],
-        performance: [
-          'Optimize loop structures where repeated calculations occur.',
-        ],
-        security: [
-          'Audit third-party dependencies for known vulnerabilities.',
-        ],
-        bestPractices: [
-          'Use static analysis tools like ESLint or SonarQube in your CI pipeline.',
-        ],
-        readability: [
-          'Add inline comments explaining key business logic.',
-        ],
-        improvedCode: code,
-      };
+      const statusCode = aiError.status === 429 ? 429 : 502;
+      return res.status(statusCode).json({
+        success: false,
+        message: 'Gemini analysis failed. Verify your API key, available quota, and model access.',
+        detail: process.env.NODE_ENV === 'development' ? aiError.message : undefined,
+      });
     }
 
     // Save review to database
