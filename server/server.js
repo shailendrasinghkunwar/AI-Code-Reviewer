@@ -19,14 +19,19 @@ const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:5173',
   'https://ai-code-reviewer-six-kappa.vercel.app',
+  'https://ai-code-reviewer-puce-alpha.vercel.app',
   ...(process.env.CLIENT_URL ? process.env.CLIENT_URL.split(',') : []),
-].map((origin) => origin.trim());
+].map((origin) => origin.trim()).filter(Boolean);
 
 app.use(cors({
   origin(origin, callback) {
-    // Allow non-browser clients (for example, Render health checks) and
-    // explicitly listed browser origins.
-    if (!origin || allowedOrigins.includes(origin)) {
+    // Allow non-browser clients (for example, Render health checks or Postman)
+    if (!origin) return callback(null, true);
+
+    // Allow explicitly listed origins or any Vercel app deployment (*.vercel.app)
+    const isAllowed = allowedOrigins.includes(origin) || origin.endsWith('.vercel.app');
+
+    if (isAllowed) {
       return callback(null, true);
     }
     return callback(new Error(`Origin not allowed by CORS: ${origin}`));
